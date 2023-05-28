@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "denscord"
 version = "0.1.0"
-description = ""
+description = "A Discord clone"
 authors = ["denver-code <csigorek@gmail.com>"]
 readme = "README.md"
 
