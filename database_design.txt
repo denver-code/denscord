@@ -1,0 +1,65 @@
+Database: denscord
+
+Collection: users
+
+Fields:
+
+* _id: ObjectId()
+* username: String
+* email: String
+* password: String
+* avatar: String
+* created_at: Date
+* updated_at: Date
+
+
+Collection: backlogs
+
+Fields:
+
+* _id: ObjectId()
+* user_id: ObjectId()
+* type: String
+* at: Date
+* action: String
+
+Collection: servers
+
+Fields:
+
+* _id: ObjectId()
+* name: String
+* description: String
+* created_at: Date
+* updated_at: Date
+
+Collection: channels
+
+Fields:
+
+* _id: ObjectId()
+* name: String
+* description: String
+* server_id: ObjectId
+* created_at: Date
+* updated_at: Date
+
+Collection: messages
+
+Fields:
+
+* _id: ObjectId()
+* author_id: ObjectId
+* channel_id: ObjectId
+* body: String
+* created_at: Date
+* updated_at: Date
+
+Collection: members
+
+Fields:
+
+* _id: ObjectId()
+* server_id: ObjectId()
+* user_id: ObjectId()
+* since: Date
