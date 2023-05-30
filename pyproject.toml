@@ -9,8 +9,11 @@ readme = "README.md"
 python = "^3.10"
 fastapi = "^0.95.2"
 uvicorn = "^0.22.0"
-pydantic = "^1.10.8"
+pydantic = {extras = ["email"], version = "^1.10.8"}
 python-dotenv = "^1.0.0"
+beanie = "^1.19.2"
+bcrypt = "^4.0.1"
+pyjwt = "^2.7.0"
 
 
 [build-system]

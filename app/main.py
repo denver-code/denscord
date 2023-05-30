@@ -1,7 +1,13 @@
-from fastapi import FastAPI
+from datetime import datetime
+from beanie import init_beanie
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.models.user import User
 
 from app.core.config import settings
+from app.core.database import db
+
+from api.router import api_router
 
 
 def get_application():
@@ -19,3 +25,11 @@ def get_application():
 
 
 app = get_application()
+
+@app.on_event("startup")
+async def on_startup():
+    await init_beanie(
+        database=db, document_models=[User],
+    )
+
+app.include_router(api_router)
