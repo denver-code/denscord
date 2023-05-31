@@ -30,6 +30,7 @@ Fields:
 * _id: ObjectId()
 * name: String
 * description: String
+* avatar: str
 * created_at: Date
 * updated_at: Date
 
