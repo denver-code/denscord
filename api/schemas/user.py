@@ -1,6 +1,11 @@
 from beanie import Document, Indexed
 from pydantic import BaseModel, EmailStr
 
-class UserAuth(BaseModel):
+class UserAuthorisation(BaseModel):
     email: EmailStr
     password: str
+
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+    username: str

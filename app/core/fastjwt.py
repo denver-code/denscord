@@ -39,4 +39,4 @@ class FastJWT:
                 raise
 
         except:
-            raise HTTPException(status_code=401, detail="Unauthorised.")
+            raise HTTPException(status_code=401, detail="Unauthorised")

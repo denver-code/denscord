@@ -1,6 +1,5 @@
-from datetime import datetime
 from beanie import init_beanie
-from fastapi import APIRouter, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.models.user import User
 
@@ -25,6 +24,7 @@ def get_application():
 
 
 app = get_application()
+
 
 @app.on_event("startup")
 async def on_startup():

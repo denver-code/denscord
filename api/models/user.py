@@ -1,5 +1,5 @@
 from beanie import Document, Indexed
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
@@ -13,4 +13,13 @@ class User(Document):
 
     class Settings:
         name = "users"
+    
 
+class UserOut(BaseModel):
+    id: str
+    email: Indexed(EmailStr, unique=True)
+    username: Optional[str] = None
+    avatar: Optional[str] = "https://cdn.discordapp.com/embed/avatars/0.png"
+
+class SetUsername(BaseModel):
+    username: str
