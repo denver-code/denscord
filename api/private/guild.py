@@ -15,6 +15,7 @@ async def create_guild(guild_data: CreateGuild, request: Request):
 
     user: User = (await User.find_one({"email": auth_token["email"]}))
     if not user:
+        # TODO: Return Unauthorised
         raise HTTPException(status_code=404, detail="User not found")
     
     guild = await Guild(**guild_data.dict(), owner=user.id).save()
@@ -119,11 +120,11 @@ async def delete_guild(id: str, request: Request):
     if guild.owner != ObjectId(auth_token["id"]):
         raise HTTPException(status_code=401, detail="You are not the owner of this guild")
     
-    await guild.delete()
-
-    await GuildMember.delete_many({"guild_id": ObjectId(id)})
-    await GuildKey.delete_many({"guild_id": ObjectId(id)})
+    await (GuildMember.find({"guild_id": ObjectId(id)})).delete() 
+    await (GuildKey.find({"guild_id": ObjectId(id)})).delete() 
     # TODO: delete all channels
+
+    await guild.delete()
 
     return {"message": "Guild deleted."}
 
@@ -161,13 +162,23 @@ async def change_guild_visibility(id: str, request: Request):
         raise HTTPException(status_code=401, detail="You are not the owner of this guild")
     
     guild.is_private = not guild.is_private
-    await guild.commit()
+    await guild.save()
 
     return {"message": "Visibility changed.", "is_private": guild.is_private}
 
 @guild_router.get("/{id}/leave")
 async def leave_guild(id: str, request: Request):
-    pass 
+    if not ObjectId.is_valid(id):
+        raise HTTPException(status_code=400, detail="Invalid ID")
+    auth_token = await FastJWT().decode(request.headers["Authorisation"])
+
+    guild_membership = await GuildMember.find_one({"guild_id": ObjectId(id), "user_id": ObjectId(auth_token["id"])})
+    if not guild_membership:
+        raise HTTPException(status_code=404, detail="You are not in this guild")
+    
+    await guild_membership.delete()
+
+    return {"message": "Left guild."}
 
 @guild_router.get("/{id}/join")
 @guild_router.get("/{id}/join/{key}")
@@ -186,7 +197,7 @@ async def join_guild(id: str, request: Request, key: str = ""):
 
     if guild.is_private:
         _key = await GuildKey.find_one({"guild_id": ObjectId(id)})
-        if _key.key != key:
+        if not _key or _key.key != key:
             raise HTTPException(status_code=404, detail="Guild not found")
 
     if await GuildMember.find_one({"guild_id": ObjectId(id), "user_id": ObjectId(user.id)}):
