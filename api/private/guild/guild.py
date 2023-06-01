@@ -6,8 +6,11 @@ from api.models.member import GuildMember
 from api.models.user import User
 from app.core.fastjwt import FastJWT
 from app.core.password import generate_password
+from api.private.guild.channel import channel_router
 
 guild_router = APIRouter(prefix="/guild")
+
+guild_router.include_router(channel_router)
 
 @guild_router.post("/")
 async def create_guild(guild_data: CreateGuild, request: Request):
