@@ -1,6 +1,8 @@
 from beanie import init_beanie
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.models.guild import Guild, GuildKey
+from api.models.member import GuildMember
 from api.models.user import User
 
 from app.core.config import settings
@@ -29,7 +31,7 @@ app = get_application()
 @app.on_event("startup")
 async def on_startup():
     await init_beanie(
-        database=db, document_models=[User],
+        database=db, document_models=[User, Guild, GuildMember, GuildKey],
     )
 
 app.include_router(api_router)
