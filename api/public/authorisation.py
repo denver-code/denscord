@@ -31,6 +31,7 @@ async def signin_event(user_auth_model: UserAuthorisation):
         raise HTTPException(status_code=401, detail="Bad email or password")
     
     jwt_token = await FastJWT().encode(optional_data={
+        "id": str(user.id),
         "email": user_auth_model.email,
     })
 

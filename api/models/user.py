@@ -21,5 +21,6 @@ class UserOut(BaseModel):
     username: Optional[str] = None
     avatar: Optional[str] = "https://cdn.discordapp.com/embed/avatars/0.png"
 
+# TODO: Make one model for modifiable fields
 class SetUsername(BaseModel):
     username: str
