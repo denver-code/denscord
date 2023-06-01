@@ -14,6 +14,8 @@ python-dotenv = "^1.0.0"
 beanie = "^1.19.2"
 bcrypt = "^4.0.1"
 pyjwt = "^2.7.0"
+websockets = "^11.0.3"
+starlette = "^0.27.0"
 
 
 [build-system]
