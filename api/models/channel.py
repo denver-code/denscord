@@ -7,7 +7,7 @@ from typing import Optional
 class Channel(Document):
     name: str
     description: str
-    server_id: PydanticObjectId
+    guild_id: PydanticObjectId
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
     # TODO: Add permissions field
@@ -20,7 +20,7 @@ class ChannelOut(BaseModel):
     id: str
     name: str
     description: str
-    server_id: PydanticObjectId
+    guild_id: PydanticObjectId
 
 
 class CreateChannel(BaseModel):
