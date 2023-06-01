@@ -230,3 +230,4 @@ async def kick_user(id: str, user_id: str, request: Request):
     await member.delete()
 
     return {"message": "Kicked user."}
+
