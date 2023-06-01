@@ -206,3 +206,27 @@ async def join_guild(id: str, request: Request, key: str = ""):
     await GuildMember(guild_id=guild.id, user_id=user.id).save()
 
     return {"message": "Joined guild"}
+
+@guild_router.delete("/{id}/{user_id}")
+async def kick_user(id: str, user_id: str, request: Request):
+    if not ObjectId.is_valid(id) or not ObjectId.is_valid(user_id):
+        raise HTTPException(status_code=400, detail="Invalid ID")
+    auth_token = await FastJWT().decode(request.headers["Authorisation"])
+
+    guild = await Guild.find_one({"_id": ObjectId(id)})
+    if not guild:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    
+    if guild.owner != ObjectId(auth_token["id"]):
+        raise HTTPException(status_code=401, detail="You are not the owner of this guild")
+    
+    if guild.owner == ObjectId(user_id):
+        raise HTTPException(status_code=400, detail="You cannot kick the owner of the guild")
+    
+    member = await GuildMember.find_one({"guild_id": ObjectId(id), "user_id": ObjectId(user_id)})
+    if not member:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    await member.delete()
+
+    return {"message": "Kicked user."}
