@@ -6,7 +6,11 @@ from api.models.guild import Guild
 from api.models.member import GuildMember
 from app.core.fastjwt import FastJWT
 
+from api.private.guild.message import message_router
+
 channel_router = APIRouter(prefix="/{guild_id}/channel")
+
+channel_router.include_router(message_router)
 
 @channel_router.post("/")
 async def create_channel(request: Request, guild_id: str, channel: CreateChannel):

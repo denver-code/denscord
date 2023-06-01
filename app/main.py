@@ -1,7 +1,7 @@
 import json
 
 from bson import ObjectId, json_util
-from app.models.message import InternalMessage, Message, MessageOut
+from api.models.message import InternalMessage, Message, MessageOut
 import random
 from beanie import init_beanie
 from fastapi import APIRouter, Cookie, Depends, FastAPI, Request, WebSocket
