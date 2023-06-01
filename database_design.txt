@@ -13,6 +13,16 @@ Fields:
 * updated_at: Date
 
 
+Collection: keys
+
+Fields:
+
+* guild_id: ObjectId()
+* key: String
+* created_at: Date
+* updated_at: Date
+
+
 Collection: backlogs
 
 Fields:
@@ -28,6 +38,8 @@ Collection: servers
 Fields:
 
 * _id: ObjectId()
+* owner: ObjectId()
+* is_private: bool
 * name: String
 * description: String
 * avatar: str
