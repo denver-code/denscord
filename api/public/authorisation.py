@@ -27,7 +27,7 @@ async def signup_event(user_auth_model: UserRegister):
 @authorisation_router.post("/signin")
 async def signin_event(user_auth_model: UserAuthorisation):
     user = await User.find_one({"email": user_auth_model.email})
-    if user_auth_model is None or hash_password(user_auth_model.password) != user.password:
+    if not user or hash_password(user_auth_model.password) != user.password:
         raise HTTPException(status_code=401, detail="Bad email or password")
     
     jwt_token = await FastJWT().encode(optional_data={
