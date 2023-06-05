@@ -1,0 +1,23 @@
+version: '3'
+services:
+  denscord_server:
+    depends_on:
+      - mongodb
+    build: .
+    volumes:
+      - .:/denscord_server
+    ports:
+      - '8180:8000'
+    environment:
+      - TZ=Europe/London
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27001:27017'
+    volumes:
+      - dbdata1:/data/db
+    restart: on-failure
+
+volumes:
+  dbdata1:

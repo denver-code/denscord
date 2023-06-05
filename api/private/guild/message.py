@@ -30,7 +30,6 @@ async def get_messages(guild_id: str, channel_id: str, request: Request, limit: 
         raise HTTPException(status_code=404, detail="Channel not found")
     
     
-    # need get 100 messages sorted by date
     messages = await Message.find({"channel_id": ObjectId(channel_id), "guild_id": ObjectId(guild_id)}).to_list(1_000_000_000_000)
     messages.sort(key=lambda x: x.created_at, reverse=True)
     messages = messages[offset:offset+limit]
