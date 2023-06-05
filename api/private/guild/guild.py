@@ -50,7 +50,8 @@ async def get_guild(id: str, request: Request):
     auth_token = await FastJWT().decode(request.headers["Authorisation"])
 
     guild = await Guild.find_one({"_id": ObjectId(id)})
-    if not guild:
+    
+    if not guild or (guild.is_private == True and not await GuildMember.find_one({"guild_id": ObjectId(id), "user_id": ObjectId(auth_token["id"])})):
         raise HTTPException(status_code=404, detail="Guild not found")
     
     guild = guild.dict()
