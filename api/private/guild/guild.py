@@ -55,11 +55,10 @@ async def get_guild(id: str, request: Request):
     
     guild = guild.dict()
     guild["id"] = str(guild["id"])
-    guild = GuildOut(**guild).dict()
-
     members = await GuildMember.find({"guild_id": ObjectId(id)}).to_list(1_000_000_000)
 
     guild["members_count"] = len(members)
+    guild = GuildOut(**guild).dict()
 
     return guild
 
