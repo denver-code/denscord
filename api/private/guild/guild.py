@@ -79,7 +79,7 @@ async def set_guild_key(id: str, request: Request):
     if guild.is_private == False:
         raise HTTPException(status_code=400, detail="Guild is not private")
 
-    key = generate_password(length=10)
+    key = generate_password()
     
     await GuildKey(guild_id=guild.id, key=key).save()
 
