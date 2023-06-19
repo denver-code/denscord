@@ -1,3 +1,4 @@
+from datetime import datetime
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Request
 
@@ -28,7 +29,7 @@ async def create_channel(request: Request, guild_id: str, channel: CreateChannel
     if await Channel.find_one({"guild_id": ObjectId(guild_id), "name": channel.name}):
         raise HTTPException(status_code=400, detail="Guild already have channel with same name")
 
-    await Channel(**channel.dict(), guild_id=guild.id).save()
+    await Channel(**channel.dict(), guild_id=guild.id, created_at=datetime.now()).save()
 
     return {"message": "Channel created"}
 
