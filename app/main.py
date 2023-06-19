@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 
 from bson import ObjectId, json_util
@@ -61,6 +62,7 @@ async def upload_message(message, guild_id, channel_id, user):
         guild_id=guild_id,
         channel_id=channel_id,
         author_id=user.id,
+        created_at=datetime.now()
         
     ).save()
     message.id = str(message.id)

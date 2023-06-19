@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from api.models.user import User
 from api.schemas.user import UserAuthorisation, UserRegister
@@ -18,7 +19,8 @@ async def signup_event(user_auth_model: UserRegister):
     user = User(
         email=user_auth_model.email,
         password=user_auth_model.password,
-        username=user_auth_model.username
+        username=user_auth_model.username,
+        created_at=datetime.now()
     )
     await user.save()
     return {"message": "User created"}

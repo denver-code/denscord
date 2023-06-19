@@ -1,3 +1,4 @@
+from datetime import datetime
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Request
 
@@ -21,8 +22,8 @@ async def create_guild(guild_data: CreateGuild, request: Request):
         # TODO: Return Unauthorised
         raise HTTPException(status_code=404, detail="User not found")
     
-    guild = await Guild(**guild_data.dict(), owner=user.id).save()
-    await GuildMember(guild_id=guild.id, user_id=user.id).save()
+    guild = await Guild(**guild_data.dict(), owner=user.id, created_at=datetime.now()).save()
+    await GuildMember(guild_id=guild.id, user_id=user.id, created_at=datetime.now()).save()
     
     return {"message": "Guild created"}
 
@@ -82,7 +83,7 @@ async def set_guild_key(id: str, request: Request):
 
     key = generate_password()
     
-    await GuildKey(guild_id=guild.id, key=key).save()
+    await GuildKey(guild_id=guild.id, key=key, created_at=datetime.now()).save()
 
     return {"message": "Keep it safe.", "key": key}
 
@@ -206,7 +207,7 @@ async def join_guild(id: str, request: Request, key: str = ""):
     if await GuildMember.find_one({"guild_id": ObjectId(id), "user_id": ObjectId(user.id)}):
         raise HTTPException(status_code=400, detail="User already in guild")
 
-    await GuildMember(guild_id=guild.id, user_id=user.id).save()
+    await GuildMember(guild_id=guild.id, user_id=user.id, created_at=datetime.now()).save()
 
     return {"message": "Joined guild"}
 
