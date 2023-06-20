@@ -23,9 +23,6 @@ async def get_user_profile(id: str):
     return user
 
 
-
-
-
 @users_router.post("/bulk")
 async def get_users_profiles(users: BulkUsers):
     _users = await User.find({"_id": {"$in": [ObjectId(user) for user in users.users]}}).to_list(1_000_000_000)
