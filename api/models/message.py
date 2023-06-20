@@ -18,7 +18,7 @@ class Message(Document):
 class MessageOut(BaseModel):
     id: str
     message: str
-    author_avatar: Optional[str] = "https://cdn.discordapp.com/embed/avatars/0.png"
+    author_avatar: Optional[str] = "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346"
     author_username: str
     created_at: datetime
 

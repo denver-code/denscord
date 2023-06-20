@@ -217,6 +217,18 @@ files = [
 pydantic = ">=1.9.0"
 
 [[package]]
+name = "libgravatar"
+version = "1.0.4"
+description = "A library that provides a Python 3 interface for the Gravatar API."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "libgravatar-1.0.4-py2.py3-none-any.whl", hash = "sha256:f967619b38914e0f941e53387881005e43929814571103f6bbfa2afd75045e20"},
+    {file = "libgravatar-1.0.4.tar.gz", hash = "sha256:05cf4f8dfefe995d09078cd3d747c8f04dcf17d6004fc7bb542049a55f2238d9"},
+]
+
+[[package]]
 name = "motor"
 version = "3.1.2"
 description = "Non-blocking MongoDB driver for Tornado or asyncio"
@@ -578,4 +590,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2ff605cb3bd08399e90281007bef9722050c84e15648112e26ea783eb46f9753"
+content-hash = "773d05883f39794d8f60d904f7a51f01b10bb8a4b6fda92dff946f6d4de14d93"
