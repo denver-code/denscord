@@ -34,10 +34,11 @@ class UserUpdate(BaseModel):
             if not re.fullmatch(regex, v):
                 raise ValueError("Invalid email")
             return v
-
-
+          
+          
 class BulkUsers(BaseModel):
     users: Optional[list[str]] = None
 
+      
 # class SetUsername(BaseModel):
 #     username: str
