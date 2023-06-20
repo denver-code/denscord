@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Request
-from api.models.user import SetUsername, User, UserOut, UserUpdate
+from api.models.user import User, UserOut, UserUpdate
 from libgravatar import Gravatar
 
 from app.core.fastjwt import FastJWT

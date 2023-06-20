@@ -24,8 +24,6 @@ class UserOut(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    # email: Optional[EmailStr] = None
-    # password: Optional[str] = None
     username: Optional[str] = None
     avatar: Optional[str] = None
 
@@ -37,7 +35,5 @@ class UserUpdate(BaseModel):
                 raise ValueError("Invalid email")
             return v
         
-
-# TODO: Make one model for modifiable fields
-class SetUsername(BaseModel):
-    username: str
+# class SetUsername(BaseModel):
+#     username: str
