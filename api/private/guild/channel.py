@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Request
 from api.models.channel import Channel, ChannelOut, CreateChannel
 from api.models.guild import Guild
 from api.models.member import GuildMember
+from api.models.message import Message
 from app.core.fastjwt import FastJWT
 
 from api.private.guild.message import message_router
@@ -56,3 +57,28 @@ async def get_guild_channels(request: Request, guild_id: str):
         guild_channels.append(channel)
 
     return guild_channels
+
+
+@channel_router.delete("/{channel_id}")
+async def delete_channel(request: Request, guild_id: str, channel_id: str):
+    if not ObjectId.is_valid(guild_id) or not ObjectId.is_valid(channel_id):
+        raise HTTPException(status_code=400, detail="Invalid ID")
+    auth_token = await FastJWT().decode(request.headers["Authorisation"])
+    
+    guild = await Guild.find_one({"_id": ObjectId(guild_id)})
+    if not guild:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    
+    if guild.owner != ObjectId(auth_token["id"]):
+        raise HTTPException(status_code=403, detail="You are not owner of this guild")
+    
+    channel = await Channel.find_one({"_id": ObjectId(channel_id)})
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    await channel.delete()
+    await (Message.find(
+        {"guild_id": ObjectId(guild_id), "channel_id": ObjectId(channel_id)}
+    )).delete()
+
+    return {"message": "Channel deleted"}
