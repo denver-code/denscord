@@ -31,3 +31,8 @@ poetry install
 poetry shell
 code .
 ```
+
+# Test
+``` bash
+pytest -v --disable-warnings
+```
