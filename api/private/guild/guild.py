@@ -4,6 +4,8 @@ from fastapi import APIRouter, HTTPException, Request
 
 from api.models.guild import CreateGuild, Guild, GuildKey, GuildOut
 from api.models.member import GuildMember
+from api.models.channel import Channel
+from api.models.message import Message
 from api.models.user import User
 from app.core.fastjwt import FastJWT
 from app.core.password import generate_password
@@ -126,7 +128,8 @@ async def delete_guild(id: str, request: Request):
     
     await (GuildMember.find({"guild_id": ObjectId(id)})).delete() 
     await (GuildKey.find({"guild_id": ObjectId(id)})).delete() 
-    # TODO: delete all channels
+    await (Channel.find({"guild_id": ObjectId(id)})).delete()
+    await (Message.find({"guild_id": ObjectId(id)})).delete()
 
     await guild.delete()
 
