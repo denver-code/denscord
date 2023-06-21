@@ -17,6 +17,10 @@ pyjwt = "^2.7.0"
 websockets = "^11.0.3"
 starlette = "^0.27.0"
 libgravatar = "^1.0.4"
+httpx = "^0.24.1"
+pytest = "^7.3.2"
+pytest-asyncio = "^0.21.0"
+mongomock-motor = "^0.0.20"
 
 
 [build-system]
