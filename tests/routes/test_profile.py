@@ -203,3 +203,26 @@ def test_bulk_search_one_valid(client):
         user1
     ]
 
+
+def test_bulk_search_one_invalid(client):
+    test_signup(client)
+    token1 = client.post(
+    "/api/public/authorisation/signin", 
+    json={
+        "email": "testuser@test.com",
+        "password": "testpassword",
+    }).json().get("token", "")
+    user1 = client.get("/api/private/profile", headers={"Authorisation":token1}).json()
+
+    del user1["email"]
+
+    response = client.post("/api/public/profile/bulk",
+        json={
+            "users": [
+                "11111891a5d13e63599968csdfe74sc"
+            ]
+        }
+    )
+    assert response.status_code == 200
+    assert response.json() == []
+
