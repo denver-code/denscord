@@ -1,5 +1,0 @@
-PROJECT_NAME=denscord
-BACKEND_CORS_ORIGINS=["http://localhost:8000", "https://localhost:8000", "http://localhost", "https://localhost"]
-DATABASE_URL="mongodb://localhost:27017"
-SALT_SECRET_KEY=$2a$12$w40nlebw3XyoZ5Cqke14M.
-JWT_SECRET_KEY=SUPERSECRETTOKEN

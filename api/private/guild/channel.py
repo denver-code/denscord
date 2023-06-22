@@ -27,8 +27,12 @@ async def create_channel(request: Request, guild_id: str, channel: CreateChannel
     if guild.owner != ObjectId(auth_token["id"]):
         raise HTTPException(status_code=403, detail="You are not owner of this guild")
     
+    if len(channel.name) > 15:
+        channel.name = channel.name[:15]
+    
     if await Channel.find_one({"guild_id": ObjectId(guild_id), "name": channel.name}):
-        raise HTTPException(status_code=400, detail="Guild already have channel with same name")
+        _len = await Channel.find({"guild_id": ObjectId(guild_id), "name": {"$regex": f"^{channel.name}-"}}).count()
+        channel.name = f"{channel.name}-{_len+1}"
 
     await Channel(**channel.dict(), guild_id=guild.id, created_at=datetime.now()).save()
 

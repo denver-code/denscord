@@ -23,6 +23,9 @@ async def create_guild(guild_data: CreateGuild, request: Request):
     if not user:
         # TODO: Return Unauthorised
         raise HTTPException(status_code=404, detail="User not found")
+
+    if len(guild_data.name) > 15:
+        guild_data.name = guild_data.name[:15]
     
     guild = await Guild(**guild_data.dict(), owner=user.id, created_at=datetime.now()).save()
     await GuildMember(guild_id=guild.id, user_id=user.id, created_at=datetime.now()).save()
