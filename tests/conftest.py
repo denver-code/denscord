@@ -14,7 +14,7 @@ from api.models.message import InternalMessage, Message, MessageOut
 @pytest.fixture(autouse=True)
 async def my_fixture():
     client = AsyncMongoMockClient()
-    await init_beanie(document_models=[User], database=client.get_database(name="denscord"))
+    await init_beanie(document_models=[User, Channel, Guild, GuildMember], database=client.get_database(name="denscord"))
 
 @pytest.fixture(scope="module")
 def client():
