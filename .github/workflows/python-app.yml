@@ -38,7 +38,7 @@ jobs:
 
     - name: Run pytest tests
       run: |
-        poetry run pytest
+        poetry run pytest -v --disable-warnings
 
     - name: Stop Docker containers
       run: docker-compose down
