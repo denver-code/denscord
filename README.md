@@ -34,5 +34,5 @@ code .
 
 # Test
 ``` bash
-pytest -v --disable-warnings
+pytest -r pF --disable-warnings
 ```
