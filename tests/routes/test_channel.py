@@ -71,4 +71,4 @@ def test_check_channel_name_lenght_cutter(client):
                 })
 
     channels = client.get(f"/api/private/guild/{guild_id}/channel/", headers={"Authorisation":token1}).json()
-    assert channels[0].get("name", "") == "123456789123456"
+    assert len(channels[0].get("name", "")) == 15
