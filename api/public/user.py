@@ -25,7 +25,13 @@ async def get_user_profile(id: str):
 
 @users_router.post("/bulk")
 async def get_users_profiles(users: BulkUsers):
-    _users = await User.find({"_id": {"$in": [ObjectId(user) for user in users.users]}}).to_list(1_000_000_000)
+    _users = []
+    for user in users.users:
+        if not ObjectId.is_valid(user):
+            continue  # Skip invalid IDs
+        _users.append(ObjectId(user))
+
+    _users = await User.find({"_id": {"$in": _users}}).to_list(1_000_000_000)
     _users_list = []
     for _user in _users:
         _user = _user.dict()
