@@ -40,7 +40,13 @@ jobs:
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
     - name: 'Create env file'
       run: |
-          echo "${{ secrets.ENV }}" > .env
+          touch .env
+          echo PROJECT_NAME=${{ secrets.PROJECT_NAME }} > .env
+          echo SALT_SECRET_KEY=${{ secrets.SALT_SECRET_KEY }} >> .env
+          echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo BACKEND_CORS_ORIGINS=${{ secrets.BACKEND_CORS_ORIGINS }} >> .env
+          cat .env
     - name: Test with pytest
       run: |
         poetry run pytest
