@@ -31,7 +31,7 @@ jobs:
       run: poetry install
 
     - name: Set up .env file
-      run: cp .env.example .env
+      run: cp sample.env .env
 
     - name: Build and run Docker containers
       run: docker-compose up --build -d
