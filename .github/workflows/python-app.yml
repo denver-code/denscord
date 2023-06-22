@@ -38,6 +38,9 @@ jobs:
     - name: Install dependencies
       run: poetry install
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+    - name: 'Create env file'
+      run: |
+          echo "${{ secrets.ENV }}" > .env
     - name: Test with pytest
       run: |
         poetry run pytest
