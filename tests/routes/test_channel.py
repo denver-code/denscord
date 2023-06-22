@@ -46,3 +46,29 @@ def test_same_channel_name(client):
     assert channels[2].get("name", "") == "test-channel-2"
 
     
+def test_check_channel_name_lenght_cutter(client):
+    test_signup(client)
+    token1 = client.post(
+    "/api/public/authorisation/signin", 
+    json={
+        "email": "testuser@test.com",
+        "password": "testpassword",
+    }).json().get("token", "")
+
+    client.post("/api/private/guild", headers={"Authorisation":token1},
+        json={
+            "name": "Test Guild",
+            "description": "Public server for testing purposes",
+            "is_private": False
+    })
+
+    guild_id = client.get("/api/private/guild", headers={"Authorisation":token1}).json()[0].get("id", "")
+
+    client.post(f"/api/private/guild/{guild_id}/channel/", headers={"Authorisation":token1},
+                json={
+                    "name": "1234567891234567",
+                    "description": "Public channel for testing purposes",
+                })
+
+    channels = client.get(f"/api/private/guild/{guild_id}/channel/", headers={"Authorisation":token1}).json()
+    assert channels[0].get("name", "") == "123456789123456"
