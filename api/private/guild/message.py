@@ -11,6 +11,7 @@ from app.core.fastjwt import FastJWT
 
 message_router = APIRouter(prefix="/{channel_id}/message")
 
+
 @message_router.get("/")
 async def get_messages(guild_id: str, channel_id: str, request: Request, limit: int = 100, offset: int = 0):
     if not ObjectId.is_valid(guild_id) or not ObjectId.is_valid(channel_id):
@@ -55,3 +56,9 @@ async def get_messages(guild_id: str, channel_id: str, request: Request, limit: 
         ).dict())
 
     return  _messages_out
+
+
+@message_router.delete("/{message_id}")
+async def delete_message(guild_id: str, channel_id: str, message_id: str, request: Request):
+    # TODO: Implement logic
+    return {"message":"deleted"}
