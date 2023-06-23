@@ -60,5 +60,37 @@ async def get_messages(guild_id: str, channel_id: str, request: Request, limit: 
 
 @message_router.delete("/{message_id}")
 async def delete_message(guild_id: str, channel_id: str, message_id: str, request: Request):
-    # TODO: Implement logic
+    # check if all ids are valid
+    if not ObjectId.is_valid(guild_id) or not ObjectId.is_valid(channel_id) or not ObjectId.is_valid(message_id):
+        raise HTTPException(status_code=400, detail="Invalid ID")
+
+    # get user token
+    auth_token = await FastJWT().decode(request.headers["Authorisation"])
+
+    # get guild, channel and message
+    guild = await Guild.find_one({"_id": ObjectId(guild_id)})
+    if not guild:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    
+    channel = await Channel.find_one({"_id": ObjectId(channel_id), "guild_id": ObjectId(guild_id)})
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    message = await Message.find_one({"_id": ObjectId(message_id), "channel_id": ObjectId(channel_id), "guild_id": ObjectId(guild_id)})
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+
+    # check if user is member of guild or a owner
+    if not await GuildMember.find_one({"guild_id": ObjectId(guild_id), "user_id": ObjectId(auth_token["id"])}):
+        raise HTTPException(status_code=403, detail="You are not member of this guild")
+
+    # check if user is author of message or a owner
+    print(message.author_id, auth_token["id"], guild.owner)
+    if not message.author_id == ObjectId(auth_token["id"]) and not guild.owner == ObjectId(auth_token["id"]):
+        raise HTTPException(status_code=403, detail="You are not the author of this message")
+
+    # delete message
+
+    await message.delete()
+
     return {"message":"deleted"}
