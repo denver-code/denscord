@@ -3,6 +3,13 @@ Denscord is a Discord clone built as a pet project to test my skills and create 
 
 [Denscord Client](https://github.com/denver-code/denscord_fe)
 
+## Actual Demo  
+> [Note] Click on image.  
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=yRj2ogMNhtw
+" target="_blank"><img src="http://img.youtube.com/vi/yRj2ogMNhtw/0.jpg" 
+alt="yRj2ogMNhtw" width="240" height="180" border="10" /></a>
+
 # ▹ Installation #
 > [!NOTE]
 > For start make sure you have python and docker installed on your machine.
