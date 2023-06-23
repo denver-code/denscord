@@ -15,9 +15,11 @@ alt="yRj2ogMNhtw" width="240" height="180" border="10" /></a>
 > For start make sure you have python and docker installed on your machine.
 ``` Bash
 git clone https://github.com/denver-code/denscord
-cd denscord
+cd denscord[Uploading requests.json…]()
+
 ```
-Rename ```sample.env -> .env``` and don't forget to change the settings inside.
+Rename ```sample.env -> .env``` and don't forget to change the settings inside.  
+Also you may import the Insomnia requests collection, that's file requests.json
 # ▹ Run using docker #
 > [!NOTE]
 > For start make sure you have docker installed on your machine.
