@@ -1,5 +1,8 @@
-# denscord
-Soon...
+# Denscord API
+Denscord is a Discord clone built as a pet project to test my skills and create a portfolio project. It allows users to create guilds, channels, and send messages in those channels. This README provides instructions on how to install and set up the Denscord API server.  
+
+[Denscord Client](https://github.com/denver-code/denscord_fe)
+
 # ▹ Installation #
 > [!NOTE]
 > For start make sure you have python and docker installed on your machine.
