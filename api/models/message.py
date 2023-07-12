@@ -14,13 +14,32 @@ class Message(Document):
 
     class Settings:
         name = "messages"
+    
+        unique_together = ("_id", "guild_id", "channel_id")
+
+
+class UserFrom(BaseModel):
+    id: str
+    is_bot: bool
+    username: str
+    avatar: str
+
+
+class ChatIn(BaseModel):
+    guild_id: str
+    channel_id: str
+
+
+class MessageMarkupOut(BaseModel):
+    message_id: str
+    from_user: UserFrom
+    chat: ChatIn
+    text: str
 
 class MessageOut(BaseModel):
-    id: str
-    message: str
-    author_avatar: Optional[str] = "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346"
-    author_username: str
+    message: MessageMarkupOut
     created_at: datetime
+
 
 class InternalMessage(BaseModel):
     message: str

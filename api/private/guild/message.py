@@ -1,4 +1,4 @@
-from api.models.message import Message
+from api.models.message import ChatIn, Message, MessageMarkupOut, UserFrom
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Request
 from api.models.channel import Channel
@@ -48,12 +48,23 @@ async def get_messages(guild_id: str, channel_id: str, request: Request, limit: 
         if not users_hashmap.get(m["author_id"]):
             user = await User.find_one({"_id": m["author_id"]})
             users_hashmap[m["author_id"]] = user.dict()
+        
+        message_out = MessageOut(
+            message=MessageMarkupOut(
+                message_id=m["id"],
+                from_user=UserFrom(
+                    id=str(m["author_id"]),
+                    is_bot=False,
+                    username=users_hashmap[m["author_id"]]["username"],
+                    avatar=users_hashmap[m["author_id"]]["avatar"]
+                ),
+                chat=ChatIn(guild_id=guild_id, channel_id=channel_id),
+                text=m["message"]
+            ),
+            created_at=m["created_at"]
+    )
 
-        _messages_out.append(MessageOut(
-            **m,
-            author_avatar=users_hashmap[m["author_id"]]["avatar"],
-            author_username=users_hashmap[m["author_id"]]["username"]
-        ).dict())
+        _messages_out.append(message_out.dict())
 
     return  _messages_out
 

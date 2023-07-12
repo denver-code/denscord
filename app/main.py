@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 
 from bson import ObjectId, json_util
-from api.models.message import InternalMessage, Message, MessageOut
+from api.models.message import ChatIn, InternalMessage, Message, MessageMarkupOut, MessageOut, UserFrom
 import random
 from beanie import init_beanie
 from fastapi import APIRouter, Cookie, Depends, FastAPI, Request, WebSocket
@@ -67,7 +67,23 @@ async def upload_message(message, guild_id, channel_id, user):
     ).save()
     message.id = str(message.id)
 
-    return MessageOut(**message.dict(), author_avatar=user.avatar, author_username=user.username).dict()
+    message_out = MessageOut(
+        message=MessageMarkupOut(
+            message_id=message.id,
+            from_user=UserFrom(
+                id=str(user.id),
+                is_bot=False,
+                username=user.username,
+                avatar=user.avatar
+            ),
+            chat=ChatIn(guild_id=guild_id, channel_id=channel_id),
+            text=message.message
+        ),
+        created_at=message.created_at
+    )
+
+    return message_out.dict()
+
 
 @app.websocket("/ws/{guild_id}/{channel_id}")
 async def ws_endpoint(websocket: WebSocket, guild_id: str, channel_id: str):
