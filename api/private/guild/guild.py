@@ -186,6 +186,13 @@ async def leave_guild(id: str, request: Request):
     if not guild_membership:
         raise HTTPException(status_code=404, detail="You are not in this guild")
     
+    guild = await Guild.find_one({"_id": ObjectId(id)})
+    if not guild:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    
+    if guild.owner == ObjectId(auth_token["id"]):
+        raise HTTPException(status_code=400, detail="You can't leave your own guild")
+    
     await guild_membership.delete()
 
     return {"message": "Left guild."}
