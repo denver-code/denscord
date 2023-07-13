@@ -9,6 +9,7 @@ class User(Document):
     password: str
     username: Optional[str] = None
     avatar: Optional[str] = "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346"
+    allow_invites: Optional[bool] = True
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
 
@@ -19,6 +20,7 @@ class User(Document):
 class UserOut(BaseModel):
     id: str
     email: Indexed(EmailStr, unique=True)
+    allow_invites: bool
     username: Optional[str] = None
     avatar: Optional[str] = "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346"
 
@@ -26,6 +28,7 @@ class UserOut(BaseModel):
 class UserUpdate(BaseModel):
     username: Optional[str] = None
     avatar: Optional[str] = None
+    allow_invites: Optional[bool] = None
 
     @validator("avatar")
     def check_email_event(cls, v):

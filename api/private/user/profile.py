@@ -5,7 +5,9 @@ from libgravatar import Gravatar
 
 from app.core.fastjwt import FastJWT
 
+
 profile_router = APIRouter(prefix="/profile")
+
 
 @profile_router.get("/")
 async def get_profile(request: Request):
@@ -21,26 +23,9 @@ async def get_profile(request: Request):
     return user
 
 
-# @profile_router.post("/username")
-# async def set_username(request: Request, new_username: SetUsername):
-#     if await User.find_one({"username": new_username.username}):
-#         raise HTTPException(status_code=400, detail="Username already registered")
-    
-#     auth_token = await FastJWT().decode(request.headers["Authorisation"])
-
-#     user: User = await User.find_one({"email": auth_token["email"]})
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-    
-#     user.username = new_username.username
-#     await user.save()
-
-#     return {"message": "Username updated"}
-
-
 @profile_router.put("/")
 async def update_profile(request: Request, user_data: UserUpdate):
-    if not user_data.username and not user_data.avatar:
+    if not user_data.username and not user_data.avatar and user_data.allow_invites == None:
         raise HTTPException(status_code=400, detail="No data to update")
     
     auth_token = await FastJWT().decode(request.headers["Authorisation"])
@@ -57,6 +42,9 @@ async def update_profile(request: Request, user_data: UserUpdate):
     if user_data.avatar:
         _avatar = Gravatar(user_data.avatar).get_image(size=256, default="identicon")
         user.avatar = _avatar
+    
+    if user_data.allow_invites != None and user_data.allow_invites != user.allow_invites:
+        user.allow_invites = user_data.allow_invites
 
     user.updated_at = datetime.now()
     await user.save()

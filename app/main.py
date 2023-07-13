@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 
 from bson import ObjectId, json_util
+from api.models.invite_request import InviteRequest
 from api.models.message import ChatIn, InternalMessage, Message, MessageMarkupOut, MessageOut, UserFrom
 import random
 from beanie import init_beanie
@@ -47,7 +48,8 @@ async def on_startup():
             GuildMember, 
             GuildKey, 
             Channel, 
-            Message
+            Message,
+            InviteRequest
         ],
     )
 
