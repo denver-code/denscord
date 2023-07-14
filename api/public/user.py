@@ -5,12 +5,14 @@ from api.models.user import BulkUsers, User, UserOut
 
 users_router = APIRouter(prefix="/profile")
 
-@users_router.get("/{id}")
-async def get_user_profile(id: str):
-    if not ObjectId.is_valid(id):
-        raise HTTPException(status_code=400, detail="Invalid ID")
+@users_router.get("/{query}")
+async def get_user_profile(query: str):
+    search_query = {"username": query}
+    if ObjectId.is_valid(query):
+        # raise HTTPException(status_code=400, detail="Invalid ID")
+        search_query = {"_id": ObjectId(query)}
 
-    user: User = (await User.find_one({"_id": ObjectId(id)}))
+    user: User = (await User.find_one(search_query))
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
