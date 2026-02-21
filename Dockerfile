@@ -1,44 +1,36 @@
-FROM python:3.11 as python-base
+FROM python:3.11-slim
 
-# https://python-poetry.org/docs#ci-recommendations
-ENV POETRY_VERSION=1.4.2
-ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VENV=/opt/poetry-venv
+# System dependencies for Pillow and building C extensions
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libjpeg-dev \
+    zlib1g-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Tell Poetry where to place its cache and virtual environment
-ENV POETRY_CACHE_DIR=/opt/.cache
+# Install Poetry 2.0+
+ENV POETRY_HOME="/opt/poetry" \
+    POETRY_VERSION=2.0.1 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_NO_INTERACTION=1
 
-# Create stage for Poetry installation
-FROM python-base as poetry-base
-
-# Creating a virtual environment just for poetry and install it with pip
-RUN python3 -m venv $POETRY_VENV \
-	&& $POETRY_VENV/bin/pip install -U pip setuptools \
-	&& $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
-
-# Create a new stage from the base python image
-FROM python-base as bincollection_bot
-
-# Copy Poetry to app image
-COPY --from=poetry-base ${POETRY_VENV} ${POETRY_VENV}
-
-# Add Poetry to PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="$POETRY_HOME/bin:$PATH"
 
 WORKDIR /app
 
-# Copy Dependencies
-COPY poetry.lock pyproject.toml ./
+# Copy only the dependency files first
+COPY pyproject.toml poetry.lock* ./
 
-# [OPTIONAL] Validate the project is properly configured
-RUN poetry check
+# Install dependencies only
+RUN poetry install --no-root
 
-# Install Dependencies
-RUN poetry install
-# --no-interaction --no-cache --without dev
+# Copy the rest of the application
+COPY . .
 
-# Copy Application
-COPY . /app
+# Ensure storage directories exist
+RUN mkdir -p static/sessions static/cars
 
-# Run Application
-CMD [ "poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

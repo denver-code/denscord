@@ -1,9 +1,9 @@
 services:
-  denscord_server:
+  api:
     build: .
     volumes:
       - .:/denscord_server
-    ports:
+    expose:
       - '8000'
     environment:
       PROJECT_NAME: ${PROJECT_NAME}
